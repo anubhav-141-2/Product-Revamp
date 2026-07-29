@@ -109,31 +109,7 @@ The dashboard shows:
 
 ## Application Workflow
 
-```text
-Register / Login
-      │
-      ▼
-Dashboard
-      │
-      ▼
-Add Job Application
-      │
-      ▼
-View Application Details
-      │
-      ├─────────────► Edit Application
-      │
-      ├─────────────► Add Notes
-      │
-      ├─────────────► Update Status
-      │
-      ▼
-Interview Rounds
-      │
-      ├── Add Round
-      ├── Edit Round
-      └── Delete Round
-```
+<img width="1169" height="3622" alt="image" src="https://github.com/user-attachments/assets/d2a3e6f7-391a-48bf-aac7-048f1b5ceb01" />
 
 ## Screens
 
@@ -272,6 +248,7 @@ The following items are not part of the initial version:
 ## UI Preview
 
 Screenshots will be added after the first version is built.
+
 
 ## License
 
