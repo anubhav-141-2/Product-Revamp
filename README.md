@@ -247,7 +247,11 @@ The following items are not part of the initial version:
 
 ## UI Preview
 
-Screenshots will be added after the first version is built.
+Actual screenshots will be added after the first version is built.Below are some of AI built screenshots that can help someone understand what we are building:
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/baeb498d-a245-4204-8242-4273c66b139a" />
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/e67af3d3-4405-41cd-bddd-bb9897174d81" />
+
+
 
 
 ## License
