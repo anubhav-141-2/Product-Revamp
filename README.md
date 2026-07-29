@@ -109,7 +109,7 @@ The dashboard shows:
 
 ## Application Workflow
 
-<img width="1169" height="3622" alt="image" src="https://github.com/user-attachments/assets/d2a3e6f7-391a-48bf-aac7-048f1b5ceb01" />
+<img width="400" height="1000" alt="image" src="https://github.com/user-attachments/assets/d2a3e6f7-391a-48bf-aac7-048f1b5ceb01" />
 
 ## Screens
 
