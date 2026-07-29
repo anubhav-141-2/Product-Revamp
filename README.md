@@ -1,58 +1,42 @@
-# 🚀 CareerSprint
+# CareerSprint
 
-<p align="center">
+A simple way to keep track of job and internship applications in one place.
 
-**Track Every Job Application. Never Miss an Opportunity.**
+## About
 
-*A simple and intuitive job application tracker for students and job seekers.*
+CareerSprint is a web application for students and job seekers who want to stay organized during the hiring process. Instead of relying on spreadsheets, sticky notes, or memory, it helps users record each application, track progress, save interview details, and keep notes in one place.
 
-</p>
+The goal is simple: users should be able to manage their applications without missing interviews, assessments, or opportunities.
 
----
+## Features
 
-## 📖 About
+### User Authentication
 
-CareerSprint is a web application that helps students and job seekers organize and track their job and internship applications from one centralized dashboard.
+- Create an account
+- Log in and log out securely
+- Use a personal dashboard
 
-Instead of relying on spreadsheets, sticky notes, or memory, CareerSprint allows users to record every application, monitor hiring progress, store interview details, and keep important notes throughout the recruitment process.
-
-> **🎯 Success Metric:** A user should be able to manage all their job applications in one place and never miss an interview, assessment, or opportunity.
-
----
-
-# ✨ Features
-
-### 👤 User Authentication
-
-* Register a new account
-* Secure Login & Logout
-* User-specific dashboard
-
----
-
-### 💼 Job Application Management
+### Job Application Management
 
 Users can:
 
-* ➕ Add a new application
-* 👀 View all applications
-* ✏️ Edit application details
-* ❌ Delete an application
+- add a new application
+- view all applications
+- update application details
+- delete an application
 
-Each application stores:
+Each application can include:
 
-* Company Name
-* Job Role
-* Application Date
-* Source (LinkedIn, Referral, Careers Page, etc.)
-* Current Status
-* Personal Notes
+- company name
+- job role
+- application date
+- source
+- current status
+- notes
 
----
+### Application Status Tracking
 
-### 📊 Application Status Tracking
-
-Every application progresses through the hiring pipeline.
+Applications can move through the hiring process in stages.
 
 ```text
 Applied
@@ -74,118 +58,59 @@ Offer
 
 Possible statuses:
 
-* Applied
-* OA Scheduled
-* OA Completed
-* Interview
-* Offer
-* Rejected
-* Withdrawn
+- Applied
+- OA Scheduled
+- OA Completed
+- Interview
+- Offer
+- Rejected
+- Withdrawn
 
----
+### Interview Tracking
 
-### 🎤 Interview Tracking
+Interview rounds are tracked inside each application. When an application reaches the interview stage, users can add interview rounds with details such as round number, round type, interview date, result, and notes.
 
-Interview rounds are tracked **inside an application**.
+### Notes
 
-Once an application's status becomes **Interview**, an additional **Interview Rounds** section appears.
+Users can keep notes about recruiter conversations, interview preparation, referrals, or feedback after interviews.
 
-Each round stores:
+### Search and Filter
 
-* Round Number
-* Round Type
-* Interview Date
-* Result
-* Notes
+Users can search by company name and filter applications by status to quickly find the opportunities they need to follow up on.
 
-Example
+### Dashboard
 
-```text
-Google
+The dashboard shows:
 
-Status : Interview
+- total applications
+- applications in interview
+- offers received
+- rejections
 
-Interview Rounds
+## Target Users
 
-✓ Round 1
-Technical
-Passed
+### Final-Year Students
 
-✓ Round 2
-System Design
-Passed
+- applying to multiple companies during placement season
+- tracking interview schedules
+- keeping all applications in one place
 
-○ Round 3
-HR
-Scheduled
-```
+### Internship Seekers
 
-This allows users to monitor both the overall application status and the progress of individual interview rounds.
+- applying through LinkedIn, Internshala, and company portals
+- needing a better way to stay organized
+- keeping interview notes in one place
 
----
+### Professionals
 
-### 📝 Notes
+- looking for a job switch
+- managing several interviews at once
+- keeping track of recruiter conversations
 
-Every application includes personal notes such as:
-
-* Recruiter details
-* Interview preparation
-* Referral information
-* Feedback after interviews
-
----
-
-### 🔍 Search & Filter
-
-Users can:
-
-* Search by company name
-* Filter by application status
-* Quickly find active opportunities
-
----
-
-### 📈 Dashboard
-
-A simple dashboard displays:
-
-* Total Applications
-* Applications in Interview Stage
-* Offers Received
-* Rejections
-
----
-
-# 👥 Target Users
-
-### 🎓 Final-Year Students
-
-* Applying to multiple companies during placement season
-* Need to track interview schedules
-* Want a centralized application tracker
-
----
-
-### 💼 Internship Seekers
-
-* Applying through LinkedIn, Internshala, and company portals
-* Need better organization
-* Want to keep interview notes
-
----
-
-### 👨‍💻 Professionals
-
-* Looking for a job switch
-* Managing multiple interviews
-* Tracking recruiter interactions
-
----
-
-# 📱 Application Workflow
+## Application Workflow
 
 ```text
-Register/Login
+Register / Login
       │
       ▼
 Dashboard
@@ -203,11 +128,6 @@ View Application Details
       ├─────────────► Update Status
       │
       ▼
-Status = Interview ?
-      │
-      ├── No → Done
-      │
-      ▼
 Interview Rounds
       │
       ├── Add Round
@@ -215,62 +135,52 @@ Interview Rounds
       └── Delete Round
 ```
 
----
+## Screens
 
-# 🖥️ Screens
+- Login / Register
+- Dashboard
+- Add Application
+- Application Details
+- Status Update
+- Interview Tracker
 
-* 🔐 Login / Register
-* 📊 Dashboard
-* ➕ Add Job Application
-* 📄 Application Details
-* ✏️ Update Application Status
-* 🎤 Interview Round Tracker
+## Database Design
 
----
+### User
 
-# 🗂️ Database Design
+| Field | Type |
+| ----- | ---- |
+| userId | Integer |
+| name | String |
+| email | String |
+| password | String |
 
-## User
+### Application
 
-| Field    | Type    |
-| -------- | ------- |
-| userId   | Integer |
-| name     | String  |
-| email    | String  |
-| password | String  |
-
----
-
-## Application
-
-| Field           | Type    |
-| --------------- | ------- |
-| applicationId   | Integer |
-| companyName     | String  |
-| role            | String  |
-| applicationDate | Date    |
-| source          | String  |
-| status          | Enum    |
-| notes           | Text    |
-| userId          | Integer |
-
----
-
-## Interview Round
-
-| Field         | Type    |
-| ------------- | ------- |
-| roundId       | Integer |
+| Field | Type |
+| ----- | ---- |
 | applicationId | Integer |
-| roundNumber   | Integer |
-| roundType     | String  |
-| interviewDate | Date    |
-| result        | Enum    |
-| notes         | Text    |
+| companyName | String |
+| role | String |
+| applicationDate | Date |
+| source | String |
+| status | Enum |
+| notes | Text |
+| userId | Integer |
 
----
+### Interview Round
 
-# 🔗 Entity Relationship
+| Field | Type |
+| ----- | ---- |
+| roundId | Integer |
+| applicationId | Integer |
+| roundNumber | Integer |
+| roundType | String |
+| interviewDate | Date |
+| result | Enum |
+| notes | Text |
+
+## Entity Relationship
 
 ```text
 User
@@ -286,105 +196,83 @@ Applications
 Interview Rounds
 ```
 
-One User → Many Applications
+One user can have many applications.
 
-One Application → Many Interview Rounds
+One application can have many interview rounds.
 
----
+## Business Rules
 
-# 📌 Business Rules
+- Users must log in before accessing their data.
+- Every application belongs to one user.
+- Users can only manage their own applications.
+- Company name and role are required.
+- Interview rounds are available only when an application status is Interview.
+- An application can have multiple interview rounds.
+- Interview rounds are not removed automatically when the application status changes.
+- Deleting an application removes all related interview rounds.
 
-* Users must log in before accessing data.
-* Every application belongs to one user.
-* Users can only manage their own applications.
-* Company name and role are mandatory.
-* Interview rounds are available only when the application status is **Interview**.
-* An application can have multiple interview rounds.
-* Interview rounds are **never deleted automatically** when the application status changes.
-* Deleting an application removes all associated interview rounds.
+## MVP Features
 
----
+- User registration
+- Login and logout
+- Dashboard
+- Add, edit, and delete applications
+- Update application status
+- Search and filter
+- Notes
+- Interview round tracking
+- Basic dashboard statistics
 
-# 🚀 MVP Features
+## Future Enhancements
 
-* ✅ User Registration
-* ✅ Login & Logout
-* ✅ Dashboard
-* ✅ Add/Edit/Delete Applications
-* ✅ Update Application Status
-* ✅ Search & Filter
-* ✅ Notes
-* ✅ Interview Round Tracking
-* ✅ Basic Dashboard Statistics
+- Resume repository
+- Referral tracker
+- Calendar integration
+- Deadline reminders
+- Email notifications
+- Dark mode
+- Advanced analytics
+- Export applications
 
----
+## Out of Scope
 
-# 🌟 Future Enhancements
+The following items are not part of the initial version:
 
-* 📄 Resume Repository
-* 🤝 Referral Tracker
-* 📅 Calendar Integration
-* 🔔 Deadline Reminders
-* 📧 Email Notifications
-* 🌙 Dark Mode
-* 📊 Advanced Analytics
-* 📤 Export Applications
+- LinkedIn integration
+- Automatic job import
+- AI interview coach
+- Recruiter portal
+- Company accounts
+- Mobile application
 
----
+## Tech Stack
 
-# ❌ Out of Scope
+### Frontend
 
-The following are intentionally excluded from the MVP:
+- React.js
+- HTML5
+- CSS3
+- JavaScript
 
-* LinkedIn Integration
-* Automatic Job Import
-* AI Interview Coach
-* Recruiter Portal
-* Company Accounts
-* Mobile Application
+### Backend
 
----
+- Spring Boot
 
-# 🛠️ Tech Stack
+### Database
 
-## Frontend
+- MySQL
 
-* React.js
-* HTML5
-* CSS3
-* JavaScript
+### Tools
 
-## Backend
+- Git
+- GitHub
+- Maven
+- Postman
 
-* Spring Boot
+## UI Preview
 
-## Database
+Screenshots will be added after the first version is built.
 
-* MySQL
+## License
 
-## Tools
-
-* Git
-* GitHub
-* Maven
-* Postman
-
----
-
-# 📸 UI Preview
-
-> Screenshots of the application will be added after implementation.
-
----
-
-# 📄 License
-
-This project is developed as part of a Software Development training assignment and is intended for educational purposes.
-
----
-
-<p align="center">
-
-⭐ **CareerSprint helps job seekers stay organized, track every opportunity, and confidently navigate the hiring process.**
-
-</p>
+This project was created as part of a software development training assignment and is intended for educational purposes.
