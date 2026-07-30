@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{{ application.company_name }}{% endblock %}
+{% block page_title %}{{ application.company_name }}{% endblock %}
 {% block content %}
 <div class="detail-page">
     <div class="detail-header">
@@ -13,26 +14,36 @@
     </div>
 
     <div class="detail-card">
-        <div class="detail-title-row">
-            <h1>{{ application.company_name }}</h1>
-            <span class="status-badge status-{{ application.status|lower|replace(' ', '-') }}">{{ application.status }}</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px;">
+            <div style="display:flex; gap:12px; align-items:center;">
+                <div class="company-logo" style="width:56px;height:56px;border-radius:12px;font-size:1.25rem">{{ application.company_name[0]|upper }}</div>
+                <div>
+                    <h1 style="margin:0">{{ application.company_name }}</h1>
+                    <div style="color:#6b7280">{{ application.role }} · {{ application.application_date }} · {{ application.source or '-' }}</div>
+                </div>
+            </div>
+            <div>
+                <span class="status-pill">{{ application.status }}</span>
+            </div>
         </div>
-        <div class="detail-grid">
-            <div class="detail-field">
-                <span class="field-label">Role</span>
-                <span class="field-value">{{ application.role }}</span>
+
+        <div style="margin:12px 0">
+            {% set stages = ['Applied','OA Scheduled','OA Completed','Interview','Offer','Rejected'] %}
+            {% set current_index = stages.index(application.status) if application.status in stages else -1 %}
+            <div class="timeline" style="--progress: {{ ((current_index + 1) / stages|length) * 100 }}%;">
+                <div class="timeline-track"></div>
+                {% for s in stages %}
+                {% set step_index = loop.index0 %}
+                {% set is_complete = step_index < current_index %}
+                {% set is_active = step_index == current_index %}
+                <div class="timeline-step {% if is_complete %}complete{% elif is_active %}active{% endif %}">
+                    <div class="dot">{{ loop.index }}</div>
+                    <div class="label">{{ s }}</div>
+                </div>
+                {% endfor %}
             </div>
-            <div class="detail-field">
-                <span class="field-label">Application Date</span>
-                <span class="field-value">{{ application.application_date }}</span>
-            </div>
-            {% if application.source %}
-            <div class="detail-field">
-                <span class="field-label">Source</span>
-                <span class="field-value">{{ application.source }}</span>
-            </div>
-            {% endif %}
         </div>
+
         {% if application.notes %}
         <div class="detail-notes">
             <h3>Notes</h3>
@@ -48,12 +59,6 @@
             <a href="{{ url_for('add_interview_round', app_id=application.application_id) }}" class="btn btn-sm btn-primary">+ Add Round</a>
             {% endif %}
         </div>
-
-        {% if application.status != 'Interview' and rounds|length == 0 %}
-        <div class="empty-state">
-            <p>Interview rounds are available when the application status is set to <strong>Interview</strong>.</p>
-        </div>
-        {% endif %}
 
         {% if rounds %}
         <div class="rounds-table-wrapper">
@@ -92,6 +97,55 @@
         {% elif rounds|length == 0 and application.status == 'Interview' %}
         <div class="empty-state">
             <p>No interview rounds added yet. Click the button above to add one.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="interview-section">
+        <div class="section-header">
+            <h2>Referrals</h2>
+            <a href="{{ url_for('add_referral', app_id=application.application_id) }}" class="btn btn-sm btn-primary">+ Add Referral</a>
+        </div>
+
+        {% if referrals %}
+        <div class="rounds-table-wrapper">
+            <table class="rounds-table">
+                <thead>
+                    <tr>
+                        <th>Referrer</th>
+                        <th>Email</th>
+                        <th>Relationship</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Notes</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ref in referrals %}
+                    <tr>
+                        <td><strong>{{ ref.referrer_name }}</strong></td>
+                        <td>{{ ref.referrer_email if ref.referrer_email else '-' }}</td>
+                        <td>{{ ref.relationship if ref.relationship else '-' }}</td>
+                        <td>{{ ref.date_referred if ref.date_referred else '-' }}</td>
+                        <td><span class="result-badge result-{{ ref.status|lower|replace(' ', '-') }}">{{ ref.status }}</span></td>
+                        <td class="notes-cell">{{ ref.notes if ref.notes else '-' }}</td>
+                        <td>
+                            <div class="table-actions">
+                                <a href="{{ url_for('edit_referral', app_id=application.application_id, referral_id=ref.referral_id) }}" class="btn btn-sm btn-outline">Edit</a>
+                                <form method="POST" action="{{ url_for('delete_referral', app_id=application.application_id, referral_id=ref.referral_id) }}" style="display:inline" onsubmit="return confirm('Delete this referral?')">
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>No referrals tracked yet. Add a referral to keep track of who referred you.</p>
         </div>
         {% endif %}
     </div>

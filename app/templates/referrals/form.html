@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if referral else 'Add' }} Referral{% endblock %}
+{% block page_title %}{{ 'Edit' if referral else 'Add' }} Referral{% endblock %}
+{% block content %}
+<div class="form-page">
+    <h1>{{ 'Edit' if referral else 'Add' }} Referral</h1>
+    <form method="POST" class="app-form">
+        <div class="form-group">
+            <label for="referrer_name">Referrer Name *</label>
+            <input type="text" id="referrer_name" name="referrer_name" value="{{ referral.referrer_name if referral else '' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="referrer_email">Referrer Email</label>
+            <input type="email" id="referrer_email" name="referrer_email" value="{{ referral.referrer_email if referral else '' }}">
+        </div>
+        <div class="form-group">
+            <label for="relationship">Relationship</label>
+            <input type="text" id="relationship" name="relationship" value="{{ referral.relationship if referral else '' }}" placeholder="Former colleague, Friend, Alumni, etc.">
+        </div>
+        <div class="form-group">
+            <label for="date_referred">Date Referred</label>
+            <input type="date" id="date_referred" name="date_referred" value="{{ referral.date_referred if referral else '' }}">
+        </div>
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status" name="status">
+                <option value="Pending" {{ 'selected' if referral and referral.status == 'Pending' }}>Pending</option>
+                <option value="Confirmed" {{ 'selected' if referral and referral.status == 'Confirmed' }}>Confirmed</option>
+                <option value="Not Responded" {{ 'selected' if referral and referral.status == 'Not Responded' }}>Not Responded</option>
+                <option value="Declined" {{ 'selected' if referral and referral.status == 'Declined' }}>Declined</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" rows="4">{{ referral.notes if referral else '' }}</textarea>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{{ 'Update' if referral else 'Add' }} Referral</button>
+            <a href="{{ url_for('view_application', app_id=application_id) }}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

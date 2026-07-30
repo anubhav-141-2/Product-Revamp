@@ -1,5 +1,5 @@
 import requests
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, Response
 from app.config import API_BASE_URL, FLASK_SECRET_KEY
 
 flask_app = Flask(__name__)
@@ -9,6 +9,11 @@ flask_app.secret_key = FLASK_SECRET_KEY
 def api_headers():
     token = session.get("token")
     return {"Authorization": f"Bearer {token}", "Content-Type": "application/json"} if token else {}
+
+
+def auth_headers():
+    token = session.get("token")
+    return {"Authorization": f"Bearer {token}"} if token else {}
 
 
 def safe_json(resp):
@@ -72,7 +77,10 @@ def dashboard():
         return redirect(url_for("login"))
     resp = requests.get(f"{API_BASE_URL}/api/applications/dashboard", headers=api_headers())
     stats = safe_json(resp) if resp.status_code == 200 else {}
-    return render_template("dashboard.html", stats=stats, user=session.get("user"))
+    # Also fetch recent applications to display on the dashboard
+    apps_resp = requests.get(f"{API_BASE_URL}/api/applications", headers=api_headers())
+    apps = safe_json(apps_resp) if apps_resp.status_code == 200 else []
+    return render_template("dashboard.html", stats=stats, recent_applications=apps, user=session.get("user"))
 
 
 @flask_app.route("/applications")
@@ -124,7 +132,9 @@ def view_application(app_id):
     app_data = safe_json(resp)
     rounds_resp = requests.get(f"{API_BASE_URL}/api/interviews/{app_id}", headers=api_headers())
     rounds = safe_json(rounds_resp) if rounds_resp.status_code == 200 else []
-    return render_template("applications/detail.html", application=app_data, rounds=rounds, user=session.get("user"))
+    referrals_resp = requests.get(f"{API_BASE_URL}/api/referrals/{app_id}", headers=api_headers())
+    referrals = safe_json(referrals_resp) if referrals_resp.status_code == 200 else []
+    return render_template("applications/detail.html", application=app_data, rounds=rounds, referrals=referrals, user=session.get("user"))
 
 
 @flask_app.route("/applications/<int:app_id>/edit", methods=["GET", "POST"])
@@ -220,3 +230,115 @@ def delete_interview_round(app_id, round_id):
     else:
         flash("Failed to delete interview round", "danger")
     return redirect(url_for("view_application", app_id=app_id))
+
+
+@flask_app.route("/applications/<int:app_id>/referrals/add", methods=["GET", "POST"])
+def add_referral(app_id):
+    if "token" not in session:
+        return redirect(url_for("login"))
+    if request.method == "POST":
+        data = {
+            "referrer_name": request.form.get("referrer_name", "").strip(),
+            "referrer_email": request.form.get("referrer_email", "").strip() or None,
+            "relationship": request.form.get("relationship", "").strip() or None,
+            "date_referred": request.form.get("date_referred") or None,
+            "status": request.form.get("status", "Pending"),
+            "notes": request.form.get("notes", "").strip(),
+        }
+        resp = requests.post(f"{API_BASE_URL}/api/referrals/{app_id}", json=data, headers=api_headers())
+        if resp.status_code == 200:
+            flash("Referral added successfully!", "success")
+        else:
+            flash(safe_json(resp).get("detail", "Failed to add referral"), "danger")
+        return redirect(url_for("view_application", app_id=app_id))
+    return render_template("referrals/form.html", user=session.get("user"), application_id=app_id, referral=None)
+
+
+@flask_app.route("/applications/<int:app_id>/referrals/<int:referral_id>/edit", methods=["GET", "POST"])
+def edit_referral(app_id, referral_id):
+    if "token" not in session:
+        return redirect(url_for("login"))
+    if request.method == "POST":
+        data = {
+            "referrer_name": request.form.get("referrer_name", "").strip(),
+            "referrer_email": request.form.get("referrer_email", "").strip() or None,
+            "relationship": request.form.get("relationship", "").strip() or None,
+            "date_referred": request.form.get("date_referred") or None,
+            "status": request.form.get("status", "Pending"),
+            "notes": request.form.get("notes", "").strip(),
+        }
+        resp = requests.put(f"{API_BASE_URL}/api/referrals/{app_id}/{referral_id}", json=data, headers=api_headers())
+        if resp.status_code == 200:
+            flash("Referral updated successfully!", "success")
+        else:
+            flash(safe_json(resp).get("detail", "Failed to update referral"), "danger")
+        return redirect(url_for("view_application", app_id=app_id))
+
+    resp = requests.get(f"{API_BASE_URL}/api/referrals/{app_id}", headers=api_headers())
+    referrals = safe_json(resp) if resp.status_code == 200 else []
+    current_referral = next((r for r in referrals if r.get("referral_id") == referral_id), None)
+    if not current_referral:
+        flash("Referral not found", "danger")
+        return redirect(url_for("view_application", app_id=app_id))
+    return render_template("referrals/form.html", user=session.get("user"), application_id=app_id, referral=current_referral)
+
+
+@flask_app.route("/applications/<int:app_id>/referrals/<int:referral_id>/delete", methods=["POST"])
+def delete_referral(app_id, referral_id):
+    if "token" not in session:
+        return redirect(url_for("login"))
+    resp = requests.delete(f"{API_BASE_URL}/api/referrals/{app_id}/{referral_id}", headers=api_headers())
+    if resp.status_code == 200:
+        flash("Referral deleted successfully!", "success")
+    else:
+        flash("Failed to delete referral", "danger")
+    return redirect(url_for("view_application", app_id=app_id))
+
+
+@flask_app.route("/resumes", methods=["GET", "POST"])
+def list_resumes():
+    if "token" not in session:
+        return redirect(url_for("login"))
+    if request.method == "POST":
+        file = request.files.get("file")
+        if not file or not file.filename:
+            flash("Please choose a file to upload", "danger")
+            return redirect(url_for("list_resumes"))
+        resp = requests.post(
+            f"{API_BASE_URL}/api/resumes/upload",
+            files={"file": (file.filename, file.stream, file.mimetype or "application/octet-stream")},
+            headers=auth_headers(),
+        )
+        if resp.status_code == 200:
+            flash("Resume uploaded successfully!", "success")
+        else:
+            flash(safe_json(resp).get("detail", "Failed to upload resume"), "danger")
+        return redirect(url_for("list_resumes"))
+
+    resp = requests.get(f"{API_BASE_URL}/api/resumes", headers=api_headers())
+    resumes = safe_json(resp) if resp.status_code == 200 else []
+    return render_template("resumes/list.html", resumes=resumes, user=session.get("user"))
+
+
+@flask_app.route("/resumes/<int:resume_id>/download")
+def download_resume(resume_id):
+    if "token" not in session:
+        return redirect(url_for("login"))
+    resp = requests.get(f"{API_BASE_URL}/api/resumes/{resume_id}/download", headers=auth_headers(), stream=True)
+    if resp.status_code != 200:
+        flash("Resume could not be downloaded", "danger")
+        return redirect(url_for("list_resumes"))
+    content_disposition = resp.headers.get("content-disposition")
+    return Response(resp.content, mimetype=resp.headers.get("content-type", "application/octet-stream"), headers={"Content-Disposition": content_disposition} if content_disposition else {})
+
+
+@flask_app.route("/resumes/<int:resume_id>/delete", methods=["POST"])
+def delete_resume(resume_id):
+    if "token" not in session:
+        return redirect(url_for("login"))
+    resp = requests.delete(f"{API_BASE_URL}/api/resumes/{resume_id}", headers=api_headers())
+    if resp.status_code == 200:
+        flash("Resume deleted successfully!", "success")
+    else:
+        flash("Failed to delete resume", "danger")
+    return redirect(url_for("list_resumes"))

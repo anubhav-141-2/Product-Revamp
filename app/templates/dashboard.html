@@ -1,29 +1,98 @@
 {% extends "base.html" %}
 {% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
 {% block content %}
 <div class="dashboard">
-    <h1>Dashboard</h1>
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-number">{{ stats.total_applications or 0 }}</div>
-            <div class="stat-label">Total Applications</div>
-        </div>
-        <div class="stat-card stat-interview">
-            <div class="stat-number">{{ stats.in_interview or 0 }}</div>
-            <div class="stat-label">In Interview</div>
-        </div>
-        <div class="stat-card stat-offer">
-            <div class="stat-number">{{ stats.offers or 0 }}</div>
-            <div class="stat-label">Offers</div>
-        </div>
-        <div class="stat-card stat-rejected">
-            <div class="stat-number">{{ stats.rejections or 0 }}</div>
-            <div class="stat-label">Rejections</div>
+    <div class="dashboard-hero">
+        <div>
+            <div class="eyebrow">Career Pulse</div>
+            <h2>Keep every opportunity moving.</h2>
+            <p>Track applications, interviews, and offers in one polished workspace.</p>
         </div>
     </div>
-    <div class="dashboard-actions">
-        <a href="{{ url_for('list_applications') }}" class="btn btn-primary">View All Applications</a>
-        <a href="{{ url_for('add_application') }}" class="btn btn-success">+ Add Application</a>
+
+    <div class="stats-row">
+        <div class="stat-card stat-apps">
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h4l2 2h5A2.5 2.5 0 0 1 20 9.5v7A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5Z"/></svg>
+            </div>
+            <div>
+                <div class="stat-number">{{ stats.total_applications or 0 }}</div>
+                <div class="stat-label">Total Applications</div>
+            </div>
+        </div>
+        <div class="stat-card stat-interview">
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16"/><path d="M7 3v4"/><path d="M17 3v4"/><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 13h8"/></svg>
+            </div>
+            <div>
+                <div class="stat-number">{{ stats.in_interview or 0 }}</div>
+                <div class="stat-label">In Interview</div>
+            </div>
+        </div>
+        <div class="stat-card stat-offer">
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 4 7v5c0 4.5 3 7.2 8 9 5-1.8 8-4.5 8-9V7Z"/><path d="M9.5 11.5 11 13l3.5-4"/></svg>
+            </div>
+            <div>
+                <div class="stat-number">{{ stats.offers or 0 }}</div>
+                <div class="stat-label">Offers</div>
+            </div>
+        </div>
+        <div class="stat-card stat-rejected">
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 8 16 16"/><path d="M16 8 8 16"/></svg>
+            </div>
+            <div>
+                <div class="stat-number">{{ stats.rejections or 0 }}</div>
+                <div class="stat-label">Rejections</div>
+            </div>
+        </div>
+    </div>
+
+    <form class="search-filter" method="GET" action="{{ url_for('list_applications') }}">
+        <input type="text" name="search" placeholder="Search by company or role..." class="search-input">
+        <select name="status" class="filter-select">
+            <option value="">All Status</option>
+            <option>Applied</option>
+            <option>OA Scheduled</option>
+            <option>OA Completed</option>
+            <option>Interview</option>
+            <option>Offer</option>
+            <option>Rejected</option>
+            <option>Withdrawn</option>
+        </select>
+        <button type="submit" class="btn btn-outline">Filter</button>
+    </form>
+
+    {% set recent = recent_applications or applications or [] %}
+    <div class="table-wrap">
+        <table class="apps-table">
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Applied On</th>
+                    <th>Source</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in recent[:7] %}
+                <tr>
+                    <td class="company-cell"><span class="company-logo">{{ app.company_name[0]|upper }}</span>{{ app.company_name }}</td>
+                    <td>{{ app.role }}</td>
+                    <td><span class="status-pill">{{ app.status }}</span></td>
+                    <td>{{ app.application_date }}</td>
+                    <td>{{ app.source or '-' }}</td>
+                    <td><a href="{{ url_for('view_application', app_id=app.application_id) }}" class="btn btn-sm btn-primary">View</a></td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6" style="padding:24px;">No recent applications</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 {% endblock %}

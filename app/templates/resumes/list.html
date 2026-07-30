@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Resumes{% endblock %}
+{% block page_title %}Resume Repository{% endblock %}
+{% block content %}
+<div class="applications-page">
+    <div class="page-header">
+        <h1>Resume Repository</h1>
+    </div>
+
+    <div class="upload-card">
+        <form method="POST" action="{{ url_for('list_resumes') }}" enctype="multipart/form-data" class="upload-form">
+            <label for="file" class="upload-label">Upload a new resume (PDF, DOC, DOCX)</label>
+            <div class="upload-row">
+                <input type="file" id="file" name="file" accept=".pdf,.doc,.docx" required class="file-input">
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </div>
+        </form>
+    </div>
+
+    {% if resumes %}
+    <div class="resume-list">
+        {% for resume in resumes %}
+        <div class="resume-card">
+            <div class="resume-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div class="resume-info">
+                <span class="resume-name">{{ resume.original_name }}</span>
+                <span class="resume-date">{{ resume.uploaded_at[:10] if resume.uploaded_at else '' }}</span>
+            </div>
+            <div class="resume-actions">
+                <a href="{{ url_for('download_resume', resume_id=resume.resume_id) }}" class="btn btn-sm btn-outline">Download</a>
+                <form method="POST" action="{{ url_for('delete_resume', resume_id=resume.resume_id) }}" style="display:inline" onsubmit="return confirm('Delete this resume?')">
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <h3>No resumes uploaded</h3>
+        <p>Upload your resume to have it ready when applying.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

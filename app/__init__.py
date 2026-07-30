@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.database import engine, Base
-from app.api import auth, applications, interviews
+from app.api import auth, applications, interviews, referrals, resumes
 
 Base.metadata.create_all(bind=engine)
 
@@ -9,6 +9,8 @@ app = FastAPI(title="CareerSprint API", version="1.0.0")
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(applications.router, prefix="/api/applications", tags=["Applications"])
 app.include_router(interviews.router, prefix="/api/interviews", tags=["Interviews"])
+app.include_router(referrals.router, prefix="/api/referrals", tags=["Referrals"])
+app.include_router(resumes.router, prefix="/api/resumes", tags=["Resumes"])
 
 
 @app.get("/api/health")

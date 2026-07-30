@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Date, Text, Enum, ForeignKey, TIMESTAMP, text
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship as orm_relationship
 from app.database import Base
 
 
@@ -12,7 +12,8 @@ class User(Base):
     password = Column(String(255), nullable=False)
     created_at = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
 
-    applications = relationship("Application", back_populates="user", cascade="all, delete-orphan")
+    applications = orm_relationship("Application", back_populates="user", cascade="all, delete-orphan")
+    resumes = orm_relationship("Resume", back_populates="user", cascade="all, delete-orphan")
 
 
 class Application(Base):
@@ -29,8 +30,9 @@ class Application(Base):
     created_at = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
     updated_at = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
 
-    user = relationship("User", back_populates="applications")
-    interview_rounds = relationship("InterviewRound", back_populates="application", cascade="all, delete-orphan")
+    user = orm_relationship("User", back_populates="applications")
+    interview_rounds = orm_relationship("InterviewRound", back_populates="application", cascade="all, delete-orphan")
+    referrals = orm_relationship("Referral", back_populates="application", cascade="all, delete-orphan")
 
 
 class InterviewRound(Base):
@@ -45,4 +47,32 @@ class InterviewRound(Base):
     notes = Column(Text)
     created_at = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
 
-    application = relationship("Application", back_populates="interview_rounds")
+    application = orm_relationship("Application", back_populates="interview_rounds")
+
+
+class Resume(Base):
+    __tablename__ = "resumes"
+
+    resume_id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
+    filename = Column(String(255), nullable=False)
+    original_name = Column(String(255), nullable=False)
+    uploaded_at = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+
+    user = orm_relationship("User", back_populates="resumes")
+
+
+class Referral(Base):
+    __tablename__ = "referrals"
+
+    referral_id = Column(Integer, primary_key=True, autoincrement=True)
+    application_id = Column(Integer, ForeignKey("applications.application_id", ondelete="CASCADE"), nullable=False)
+    referrer_name = Column(String(255), nullable=False)
+    referrer_email = Column(String(255))
+    relationship = Column(String(255))
+    date_referred = Column(Date)
+    status = Column(Enum("Pending", "Confirmed", "Not Responded", "Declined"), default="Pending")
+    notes = Column(Text)
+    created_at = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+
+    application = orm_relationship("Application", back_populates="referrals")

@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block title %}Applications{% endblock %}
+{% block page_title %}Applications{% endblock %}
 {% block content %}
 <div class="applications-page">
     <div class="page-header">
         <h1>Applications</h1>
-        <a href="{{ url_for('add_application') }}" class="btn btn-primary">+ New Application</a>
     </div>
 
     <form class="search-filter" method="GET">
-        <input type="text" name="search" placeholder="Search by company..." value="{{ search }}" class="search-input">
+        <input type="text" name="search" placeholder="Search by company or role..." value="{{ search }}" class="search-input">
         <select name="status" class="filter-select">
             <option value="">All Statuses</option>
             <option value="Applied" {{ 'selected' if status_filter == 'Applied' }}>Applied</option>
@@ -23,27 +23,39 @@
     </form>
 
     {% if applications %}
-    <div class="application-list">
-        {% for app in applications %}
-        <div class="app-card">
-            <div class="app-card-header">
-                <h3>{{ app.company_name }}</h3>
-                <span class="status-badge status-{{ app.status|lower|replace(' ', '-') }}">{{ app.status }}</span>
-            </div>
-            <div class="app-card-body">
-                <p><strong>Role:</strong> {{ app.role }}</p>
-                <p><strong>Applied:</strong> {{ app.application_date }}</p>
-                {% if app.source %}<p><strong>Source:</strong> {{ app.source }}</p>{% endif %}
-            </div>
-            <div class="app-card-actions">
-                <a href="{{ url_for('view_application', app_id=app.application_id) }}" class="btn btn-sm btn-primary">View</a>
-                <a href="{{ url_for('edit_application', app_id=app.application_id) }}" class="btn btn-sm btn-outline">Edit</a>
-                <form method="POST" action="{{ url_for('delete_application', app_id=app.application_id) }}" style="display:inline" onsubmit="return confirm('Delete {{ app.company_name }}?')">
-                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                </form>
-            </div>
-        </div>
-        {% endfor %}
+    <div class="table-wrap">
+        <table class="apps-table">
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Applied On</th>
+                    <th>Source</th>
+                    <th>Interview</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in applications %}
+                <tr>
+                    <td class="company-cell"><span class="company-logo">{{ app.company_name[0]|upper }}</span>{{ app.company_name }}</td>
+                    <td>{{ app.role }}</td>
+                    <td><span class="status-pill">{{ app.status }}</span></td>
+                    <td>{{ app.application_date }}</td>
+                    <td>{{ app.source or '-' }}</td>
+                    <td>{{ app.interview_summary or '-' }}</td>
+                    <td>
+                        <a href="{{ url_for('view_application', app_id=app.application_id) }}" class="btn btn-sm btn-primary">View</a>
+                        <a href="{{ url_for('edit_application', app_id=app.application_id) }}" class="btn btn-sm btn-outline">Edit</a>
+                        <form method="POST" action="{{ url_for('delete_application', app_id=app.application_id) }}" style="display:inline" onsubmit="return confirm('Delete {{ app.company_name }}?')">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
     {% else %}
     <div class="empty-state">

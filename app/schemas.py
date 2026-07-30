@@ -88,6 +88,48 @@ class InterviewRoundOut(BaseModel):
     model_config = {"from_attributes": True}
 
 
+class ResumeOut(BaseModel):
+    resume_id: int
+    user_id: int
+    filename: str
+    original_name: str
+    uploaded_at: Optional[datetime] = None
+
+    model_config = {"from_attributes": True}
+
+
+class ReferralCreate(BaseModel):
+    referrer_name: str
+    referrer_email: Optional[str] = None
+    relationship: Optional[str] = None
+    date_referred: Optional[date] = None
+    status: Optional[str] = "Pending"
+    notes: Optional[str] = None
+
+
+class ReferralUpdate(BaseModel):
+    referrer_name: Optional[str] = None
+    referrer_email: Optional[str] = None
+    relationship: Optional[str] = None
+    date_referred: Optional[date] = None
+    status: Optional[str] = None
+    notes: Optional[str] = None
+
+
+class ReferralOut(BaseModel):
+    referral_id: int
+    application_id: int
+    referrer_name: str
+    referrer_email: Optional[str] = None
+    relationship: Optional[str] = None
+    date_referred: Optional[date] = None
+    status: str
+    notes: Optional[str] = None
+    created_at: Optional[datetime] = None
+
+    model_config = {"from_attributes": True}
+
+
 class DashboardStats(BaseModel):
     total_applications: int
     in_interview: int
