@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if application else 'Add' }} Application{% endblock %}
+{% block content %}
+<div class="form-page">
+    <h1>{{ 'Edit' if application else 'Add' }} Application</h1>
+    <form method="POST" class="app-form">
+        <div class="form-group">
+            <label for="company_name">Company Name *</label>
+            <input type="text" id="company_name" name="company_name" value="{{ application.company_name if application else '' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="role">Role *</label>
+            <input type="text" id="role" name="role" value="{{ application.role if application else '' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="application_date">Application Date *</label>
+            <input type="date" id="application_date" name="application_date" value="{{ application.application_date if application else '' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="source">Source</label>
+            <input type="text" id="source" name="source" value="{{ application.source if application else '' }}" placeholder="LinkedIn, Company site, etc.">
+        </div>
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status" name="status">
+                <option value="Applied" {{ 'selected' if application and application.status == 'Applied' }}>Applied</option>
+                <option value="OA Scheduled" {{ 'selected' if application and application.status == 'OA Scheduled' }}>OA Scheduled</option>
+                <option value="OA Completed" {{ 'selected' if application and application.status == 'OA Completed' }}>OA Completed</option>
+                <option value="Interview" {{ 'selected' if application and application.status == 'Interview' }}>Interview</option>
+                <option value="Offer" {{ 'selected' if application and application.status == 'Offer' }}>Offer</option>
+                <option value="Rejected" {{ 'selected' if application and application.status == 'Rejected' }}>Rejected</option>
+                <option value="Withdrawn" {{ 'selected' if application and application.status == 'Withdrawn' }}>Withdrawn</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" rows="4">{{ application.notes if application else '' }}</textarea>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{{ 'Update' if application else 'Add' }} Application</button>
+            <a href="{{ url_for('list_applications') }}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}{{ application.company_name }}{% endblock %}
+{% block content %}
+<div class="detail-page">
+    <div class="detail-header">
+        <a href="{{ url_for('list_applications') }}" class="btn btn-outline btn-sm">&larr; Back to Applications</a>
+        <div class="detail-actions">
+            <a href="{{ url_for('edit_application', app_id=application.application_id) }}" class="btn btn-sm btn-primary">Edit</a>
+            <form method="POST" action="{{ url_for('delete_application', app_id=application.application_id) }}" style="display:inline" onsubmit="return confirm('Delete {{ application.company_name }}?')">
+                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="detail-card">
+        <div class="detail-title-row">
+            <h1>{{ application.company_name }}</h1>
+            <span class="status-badge status-{{ application.status|lower|replace(' ', '-') }}">{{ application.status }}</span>
+        </div>
+        <div class="detail-grid">
+            <div class="detail-field">
+                <span class="field-label">Role</span>
+                <span class="field-value">{{ application.role }}</span>
+            </div>
+            <div class="detail-field">
+                <span class="field-label">Application Date</span>
+                <span class="field-value">{{ application.application_date }}</span>
+            </div>
+            {% if application.source %}
+            <div class="detail-field">
+                <span class="field-label">Source</span>
+                <span class="field-value">{{ application.source }}</span>
+            </div>
+            {% endif %}
+        </div>
+        {% if application.notes %}
+        <div class="detail-notes">
+            <h3>Notes</h3>
+            <p>{{ application.notes }}</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="interview-section">
+        <div class="section-header">
+            <h2>Interview Rounds</h2>
+            {% if application.status == 'Interview' %}
+            <a href="{{ url_for('add_interview_round', app_id=application.application_id) }}" class="btn btn-sm btn-primary">+ Add Round</a>
+            {% endif %}
+        </div>
+
+        {% if application.status != 'Interview' and rounds|length == 0 %}
+        <div class="empty-state">
+            <p>Interview rounds are available when the application status is set to <strong>Interview</strong>.</p>
+        </div>
+        {% endif %}
+
+        {% if rounds %}
+        <div class="rounds-table-wrapper">
+            <table class="rounds-table">
+                <thead>
+                    <tr>
+                        <th>Round</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Result</th>
+                        <th>Notes</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for round in rounds %}
+                    <tr>
+                        <td><span class="round-number-badge">{{ round.round_number }}</span></td>
+                        <td>{{ round.round_type if round.round_type else '-' }}</td>
+                        <td>{{ round.interview_date if round.interview_date else '-' }}</td>
+                        <td><span class="result-badge result-{{ round.result|lower|replace(' ', '-') }}">{{ round.result }}</span></td>
+                        <td class="notes-cell">{{ round.notes if round.notes else '-' }}</td>
+                        <td>
+                            <div class="table-actions">
+                                <a href="{{ url_for('edit_interview_round', app_id=application.application_id, round_id=round.round_id) }}" class="btn btn-sm btn-outline">Edit</a>
+                                <form method="POST" action="{{ url_for('delete_interview_round', app_id=application.application_id, round_id=round.round_id) }}" style="display:inline" onsubmit="return confirm('Delete this round?')">
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% elif rounds|length == 0 and application.status == 'Interview' %}
+        <div class="empty-state">
+            <p>No interview rounds added yet. Click the button above to add one.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

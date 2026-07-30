@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if round else 'Add' }} Interview Round{% endblock %}
+{% block content %}
+<div class="form-page">
+    <h1>{{ 'Edit' if round else 'Add' }} Interview Round</h1>
+    <form method="POST" class="app-form">
+        <div class="form-group">
+            <label for="round_number">Round Number *</label>
+            <input type="number" id="round_number" name="round_number" value="{{ round.round_number if round else '' }}" min="1" required>
+        </div>
+        <div class="form-group">
+            <label for="round_type">Round Type</label>
+            <input type="text" id="round_type" name="round_type" value="{{ round.round_type if round else '' }}" placeholder="Technical, HR, Behavioral, etc.">
+        </div>
+        <div class="form-group">
+            <label for="interview_date">Interview Date</label>
+            <input type="date" id="interview_date" name="interview_date" value="{{ round.interview_date if round else '' }}">
+        </div>
+        <div class="form-group">
+            <label for="result">Result</label>
+            <select id="result" name="result">
+                <option value="Awaiting Result" {{ 'selected' if round and round.result == 'Awaiting Result' }}>Awaiting Result</option>
+                <option value="Selected" {{ 'selected' if round and round.result == 'Selected' }}>Selected</option>
+                <option value="Rejected" {{ 'selected' if round and round.result == 'Rejected' }}>Rejected</option>
+                <option value="On Hold" {{ 'selected' if round and round.result == 'On Hold' }}>On Hold</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" rows="4">{{ round.notes if round else '' }}</textarea>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{{ 'Update' if round else 'Add' }} Round</button>
+            <a href="{{ url_for('view_application', app_id=application_id) }}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

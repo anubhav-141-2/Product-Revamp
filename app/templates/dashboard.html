@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="dashboard">
+    <h1>Dashboard</h1>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number">{{ stats.total_applications or 0 }}</div>
+            <div class="stat-label">Total Applications</div>
+        </div>
+        <div class="stat-card stat-interview">
+            <div class="stat-number">{{ stats.in_interview or 0 }}</div>
+            <div class="stat-label">In Interview</div>
+        </div>
+        <div class="stat-card stat-offer">
+            <div class="stat-number">{{ stats.offers or 0 }}</div>
+            <div class="stat-label">Offers</div>
+        </div>
+        <div class="stat-card stat-rejected">
+            <div class="stat-number">{{ stats.rejections or 0 }}</div>
+            <div class="stat-label">Rejections</div>
+        </div>
+    </div>
+    <div class="dashboard-actions">
+        <a href="{{ url_for('list_applications') }}" class="btn btn-primary">View All Applications</a>
+        <a href="{{ url_for('add_application') }}" class="btn btn-success">+ Add Application</a>
+    </div>
+</div>
+{% endblock %}
