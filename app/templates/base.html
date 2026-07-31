@@ -79,30 +79,49 @@
     </div>
     {% else %}
     <div class="auth-landing">
-        <div class="auth-landing-card">
-            <div class="auth-brand">
-                <div class="brand-mark auth-brand-mark">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <path d="M5 7.5A2.5 2.5 0 0 1 7.5 5h9A2.5 2.5 0 0 1 19 7.5v9a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 5 16.5Z"/>
-                        <path d="M8 10h8"/>
-                        <path d="M8 14h5"/>
-                    </svg>
+        <div class="auth-shell">
+            <aside class="auth-panel">
+                <div class="auth-brand">
+                    <div class="brand-mark auth-brand-mark">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M5 7.5A2.5 2.5 0 0 1 7.5 5h9A2.5 2.5 0 0 1 19 7.5v9a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 5 16.5Z"/>
+                            <path d="M8 10h8"/>
+                            <path d="M8 14h5"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1>CareerSprint</h1>
+                        <p>Organize applications, interviews, and offers in one clear workspace.</p>
+                    </div>
                 </div>
-                <div>
-                    <h1>CareerSprint</h1>
-                    <p>Organize applications, interviews, and offers in one clear workspace.</p>
+                <div class="auth-panel-points">
+                    <div class="auth-point">
+                        <span class="auth-point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 4 7v5c0 4.5 3 7.2 8 9 5-1.8 8-4.5 8-9V7Z"/><path d="m9 11.5 2 2 4-4.5"/></svg></span>
+                        <div><strong>Never miss an interview</strong><span>Every round, date, and result in one timeline.</span></div>
+                    </div>
+                    <div class="auth-point">
+                        <span class="auth-point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h4l2 2h5A2.5 2.5 0 0 1 20 9.5v7A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5Z"/></svg></span>
+                        <div><strong>All applications in one place</strong><span>Companies, roles, sources, and notes.</span></div>
+                    </div>
+                    <div class="auth-point">
+                        <span class="auth-point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 19a8 8 0 1 0-8-8"/><path d="M3 19V9h10"/><path d="M3 19h10"/></svg></span>
+                        <div><strong>Know where you stand</strong><span>Search, filter, and track offers & rejections.</span></div>
+                    </div>
                 </div>
-            </div>
-            <div class="auth-landing-body">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="alert alert-{{ category }}">{{ message }}</div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
-                {{ self.content() }}
-            </div>
+                <div class="auth-panel-footer">Students · Internship seekers · Professionals</div>
+            </aside>
+            <main class="auth-main">
+                <div class="auth-main-inner">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    {{ self.content() }}
+                </div>
+            </main>
         </div>
     </div>
     {% endif %}

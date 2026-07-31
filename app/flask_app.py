@@ -27,7 +27,7 @@ def safe_json(resp):
 def home():
     if "token" in session:
         return redirect(url_for("dashboard"))
-    return redirect(url_for("login"))
+    return render_template("landing.html")
 
 
 @flask_app.route("/register", methods=["GET", "POST"])

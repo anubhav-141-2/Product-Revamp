@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerSprint - Track Every Application, Interview & Offer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="landing-nav">
+    <div class="landing-container nav-inner">
+        <a class="brand" href="{{ url_for('home') }}">
+            <span class="brand-mark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M5 7.5A2.5 2.5 0 0 1 7.5 5h9A2.5 2.5 0 0 1 19 7.5v9a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 5 16.5Z"/>
+                    <path d="M8 10h8"/>
+                    <path d="M8 14h5"/>
+                </svg>
+            </span>
+            <span class="brand-name">CareerSprint</span>
+        </a>
+        <nav class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#pipeline">How it works</a>
+        </nav>
+        <div class="nav-cta">
+            <a href="{{ url_for('login') }}" class="btn btn-ghost">Log In</a>
+            <a href="{{ url_for('register') }}" class="btn btn-primary">Get Started Free</a>
+        </div>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="landing-container hero-grid">
+        <div class="hero-copy">
+            <div class="eyebrow">Your Job Hunt, Organized</div>
+            <h1>Never lose track of a <span class="grad-text">job application</span> again.</h1>
+            <p>CareerSprint keeps every application, interview round, and offer in one clean workspace — so you can focus on preparing, not on remembering.</p>
+            <div class="hero-cta">
+                <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Start Tracking Free</a>
+                <a href="{{ url_for('login') }}" class="btn btn-ghost btn-lg">Log In</a>
+            </div>
+            <div class="hero-proof">
+                <span class="proof-item"><strong>7</strong> statuses</span>
+                <span class="proof-item"><strong>1</strong> dashboard</span>
+                <span class="proof-item"><strong>0</strong> missed interviews</span>
+            </div>
+        </div>
+
+        <div class="hero-mock" aria-hidden="true">
+            <div class="mock-window">
+                <div class="mock-topbar">
+                    <span></span><span></span><span></span>
+                    <div class="mock-title">Dashboard</div>
+                </div>
+                <div class="mock-body">
+                    <div class="mock-stats">
+                        <div class="mock-stat"><div class="mock-num">12</div><div class="mock-lbl">Applications</div></div>
+                        <div class="mock-stat"><div class="mock-num">3</div><div class="mock-lbl">Interviews</div></div>
+                        <div class="mock-stat"><div class="mock-num">1</div><div class="mock-lbl">Offer</div></div>
+                    </div>
+                    <div class="mock-table">
+                        <div class="mock-row mock-head">
+                            <span>Company</span><span>Role</span><span>Status</span>
+                        </div>
+                        <div class="mock-row">
+                            <span class="mock-company"><i class="mock-logo">S</i>Stripe</span>
+                            <span>SWE Intern</span>
+                            <span class="mock-pill pill-interview">Interview</span>
+                        </div>
+                        <div class="mock-row">
+                            <span class="mock-company"><i class="mock-logo">G</i>Google</span>
+                            <span>Software Eng</span>
+                            <span class="mock-pill pill-oa">OA Completed</span>
+                        </div>
+                        <div class="mock-row">
+                            <span class="mock-company"><i class="mock-logo">A</i>Atlassian</span>
+                            <span>Frontend Dev</span>
+                            <span class="mock-pill pill-offer">Offer</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mock-glow"></div>
+        </div>
+    </div>
+</section>
+
+<section class="logos-band">
+    <div class="landing-container">
+        <p>Built for students, internship seekers & professionals</p>
+    </div>
+</section>
+
+<section class="section" id="features">
+    <div class="landing-container">
+        <div class="section-head">
+            <div class="eyebrow">Features</div>
+            <h2>Everything you need to win the job hunt</h2>
+            <p>No spreadsheets. No sticky notes. No missed follow-ups.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon f1">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h4l2 2h5A2.5 2.5 0 0 1 20 9.5v7A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5Z"/></svg>
+                </div>
+                <h3>Application Tracker</h3>
+                <p>Log every application with company, role, source, date, and notes — all in one place.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon f2">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                </div>
+                <h3>Interview Rounds</h3>
+                <p>Track each round with date, type, result, and notes so you're always prepared for the next one.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon f3">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 4 7v5c0 4.5 3 7.2 8 9 5-1.8 8-4.5 8-9V7Z"/><path d="M9.5 11.5 11 13l3.5-4"/></svg>
+                </div>
+                <h3>Status Pipeline</h3>
+                <p>Move applications from Applied to Offer with a clear visual pipeline — no more guessing where you stand.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon f4">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16"/><path d="M7 3v4"/><path d="M17 3v4"/><rect x="4" y="5" width="16" height="14" rx="2"/></svg>
+                </div>
+                <h3>Interview Calendar</h3>
+                <p>See what's coming up and never miss a schedule — every interview date, front and center.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon f5">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+                </div>
+                <h3>Search & Filter</h3>
+                <p>Find any application in seconds. Filter by status to know exactly what needs follow-up today.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon f6">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+                </div>
+                <h3>Resume Repository</h3>
+                <p>Upload and download your resumes anytime, so the right version is always one click away.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section-alt" id="pipeline">
+    <div class="landing-container">
+        <div class="section-head">
+            <div class="eyebrow">How it works</div>
+            <h2>One clear pipeline, from applied to offer</h2>
+        </div>
+        <div class="pipeline">
+            <div class="pipeline-step done">
+                <div class="pipe-dot">1</div>
+                <strong>Applied</strong>
+            </div>
+            <div class="pipe-line"></div>
+            <div class="pipeline-step done">
+                <div class="pipe-dot">2</div>
+                <strong>OA Scheduled</strong>
+            </div>
+            <div class="pipe-line"></div>
+            <div class="pipeline-step active">
+                <div class="pipe-dot">3</div>
+                <strong>OA Completed</strong>
+            </div>
+            <div class="pipe-line"></div>
+            <div class="pipeline-step">
+                <div class="pipe-dot">4</div>
+                <strong>Interview</strong>
+            </div>
+            <div class="pipe-line"></div>
+            <div class="pipeline-step">
+                <div class="pipe-dot">5</div>
+                <strong>Offer</strong>
+            </div>
+        </div>
+        <p class="pipeline-note">Every status change is tracked. Every interview round is remembered.</p>
+    </div>
+</section>
+
+<section class="cta-band">
+    <div class="landing-container cta-inner">
+        <h2>Your next offer is one organized sprint away.</h2>
+        <p>Join CareerSprint and take control of your job search today.</p>
+        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Create Free Account</a>
+    </div>
+</section>
+
+<footer class="landing-footer">
+    <div class="landing-container footer-inner">
+        <span class="footer-brand">
+            <span class="brand-mark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M5 7.5A2.5 2.5 0 0 1 7.5 5h9A2.5 2.5 0 0 1 19 7.5v9a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 5 16.5Z"/>
+                    <path d="M8 10h8"/>
+                    <path d="M8 14h5"/>
+                </svg>
+            </span>
+            CareerSprint
+        </span>
+        <span class="footer-links">
+            <a href="{{ url_for('login') }}">Log In</a>
+            <a href="{{ url_for('register') }}">Register</a>
+        </span>
+    </div>
+    <p class="footer-note">Built for students, internship seekers & professionals.</p>
+</footer>
+
+</body>
+</html>

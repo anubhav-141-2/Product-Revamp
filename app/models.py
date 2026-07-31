@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, Text, Enum, ForeignKey, TIMESTAMP, text
+from sqlalchemy import Column, Integer, String, Date, Text, Enum, ForeignKey, TIMESTAMP, text, func
 from sqlalchemy.orm import relationship as orm_relationship
 from app.database import Base
 
@@ -28,7 +28,7 @@ class Application(Base):
     status = Column(Enum("Applied", "OA Scheduled", "OA Completed", "Interview", "Offer", "Rejected", "Withdrawn"), default="Applied")
     notes = Column(Text)
     created_at = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
-    updated_at = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
+    updated_at = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"), onupdate=func.now())
 
     user = orm_relationship("User", back_populates="applications")
     interview_rounds = orm_relationship("InterviewRound", back_populates="application", cascade="all, delete-orphan")
